@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
         //visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false, //Etiquette de debug (coin haut à droite)
-      // home: new Home(),
-      home: new FutureTest(),
+      home: new Home(),
+      // home: new FutureTest(),
     );
   }
 }

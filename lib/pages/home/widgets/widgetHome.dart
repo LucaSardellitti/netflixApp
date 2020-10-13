@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import '../../details/details.dart';
+import 'package:AppYnov/repository/tmdb/repository.dart';
+import 'package:AppYnov/models/movies_model.dart';
 
 
 class HomeWidget extends StatelessWidget {
@@ -37,7 +39,8 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      new ListViewBuilderPrint()              
+                      new ListViewBuilderPrint()  
+                      // new ListViewBuilderPrint2()            
                     ],
                   )
                 ),
@@ -156,3 +159,32 @@ class ListViewBuilderPrint extends StatelessWidget {
     );
   }
 }
+
+// class ListViewBuilderPrint2 extends StatelessWidget {
+//   @override
+//   Widget build (BuildContext context) {
+//     return new Scaffold(
+//       body: FutureBuilder(
+//         future: RepoTMDB.fetchData(),
+//         builder: (BuildContext context, AsyncSnapshot<List<MovieModel>> snapshot){
+//           if(snapshot.connectionState != ConnectionState.done) {
+//             return Center(
+//               child: CircularProgressIndicator(),
+//             );
+//           } else {
+//             List<MovieModel> movies = snapshot.data;
+//             return ListView(
+//               children: movies
+//               .map(
+//                 (MovieModel movies) => ListTile(
+//                 title: Text(movies.title),
+//                 ),
+//               )
+//               .toList()
+//             );   
+//           }
+//         },
+//       ),
+//     );
+//   }
+// }

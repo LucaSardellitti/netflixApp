@@ -24,24 +24,24 @@ class _Home extends State<Home> {
 }
 
 
-class FutureTest extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: RepoTMDB.fetchData(),
-        builder: (context, snapshot){
-          if(snapshot.connectionState != ConnectionState.done) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return Center(
-              child: Text(snapshot.data)
-            );
-          }
-        },
-      ),
-    );
-  }
-}
+// class FutureTest extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: FutureBuilder(
+//         future: RepoTMDB.fetchData(),
+//         builder: (context, snapshot){
+//           if(snapshot.connectionState != ConnectionState.done) {
+//             return Center(
+//               child: CircularProgressIndicator(),
+//             );
+//           } else {
+//             return Center(
+//               child: Text(snapshot.data)
+//             );
+//           }
+//         },
+//       ),
+//     );
+//   }
+// }
