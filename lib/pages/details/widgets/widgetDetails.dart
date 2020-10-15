@@ -1,19 +1,30 @@
+import 'package:AppYnov/repository/tmdb/repository.dart';
 import 'package:flutter/material.dart';
 
 class DetailsWidget extends StatelessWidget {
+  final int id;
+  final String title;
+  final String poster;
+  // final dynamic average;
+  final String description;
+  final String date;
+  DetailsWidget(this.id, this.title, this.poster, /*this.average,*/ this.description, this.date);
+  
   @override
   Widget build(BuildContext context) {
     return new Stack(
         fit: StackFit.expand,
         // alignment: .bottomCenter,
         children: [
-          Image.asset(
-            'assets/images/imgFilm.jpg',
-            fit: BoxFit.cover
+          Image.network(
+            'https://image.tmdb.org/t/p/original'+ poster,
+            fit: BoxFit.cover,
           ),
 
-          // Black Bottom Gradient
-          new Container(
+          new SingleChildScrollView(
+            child:
+            // Black Bottom Gradient
+            new Container(
             // Responsive sur tout les devices
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -39,7 +50,7 @@ class DetailsWidget extends StatelessWidget {
                   child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'Enola Holmes',
+                        title,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -71,7 +82,7 @@ class DetailsWidget extends StatelessWidget {
                       // Colonne 2 -> Date
                       Container(
                         child: Text(
-                          '  2020  -',
+                          '  '+ date +'  -',
                           style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -90,7 +101,7 @@ class DetailsWidget extends StatelessWidget {
                             color: Colors.tealAccent[400],
                             size: 16.0,
                             ),
-                            Text('  7.6',
+                            Text('  In test'/*+ average*/,
                               style: TextStyle( 
                               fontWeight: FontWeight.bold,
                               color: Colors.tealAccent[400],
@@ -176,6 +187,7 @@ class DetailsWidget extends StatelessWidget {
 
                 // Rangé 4 -> Acteurs
                 Container(
+                  color: Colors.orange,
                   width: MediaQuery.of(context).size.width,
                   height: 50.0,
                   margin: EdgeInsets.only(right: 30.0, left: 30.0),
@@ -184,33 +196,58 @@ class DetailsWidget extends StatelessWidget {
                       // Rangé 2 -> Text sommaire
                       Container(
                         margin: EdgeInsets.only(top: 10.0),
-                        child: Text.rich(
-                          TextSpan(
-                            children: <TextSpan>[
-                              // Premier texte
-                              TextSpan(
-                                text: ' Cast: ', 
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold, 
-                                  color: Colors.white,
-                                  fontSize: 12.0,
-                                )
-                              ),
+                        //Un FutureBuilder permet d'afficher de manière asynchrone les résultats d'un Future
+                        child: FutureBuilder(
+                          future: RepoTMDB.fetchDataPopularMovies(),
+                          builder: (context, snapshot){
+                            //Test de la connexion - On affiche un loader
+                            if(snapshot.connectionState != ConnectionState.done) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            //Sinon on construit la liste 
+                            else {
+                              return ListView.builder(
+                                itemBuilder: (BuildContext context, int index) => GestureDetector(
+                                  // Mise en forme des images
+                                  child: Text(
+                                    snapshot.data[index].actors,
+                                  ),
 
-                             // Deuxième texte
-                             TextSpan(
-                                text: 'Millie Bobby Brown, Henry Cavill, Sam Clafin, Helena Bonham Carter', 
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.white,
-                                  fontSize: 12.0,
                                 )
-                              ),
+                              );
+                            }
+                          },
+                        ),
+                        // child: Text.rich(
+                        //   TextSpan(
+                        //     children: <TextSpan>[
+                        //       // Premier texte
+                        //       TextSpan(
+                        //         text: ' Cast: ', 
+                        //         style: TextStyle(
+                        //           fontWeight: FontWeight.bold, 
+                        //           color: Colors.white,
+                        //           fontSize: 12.0,
+                        //         )
+                        //       ),
 
-                            ],
-                          ),
-                        )
-                      )
+                        //      // Deuxième texte
+                        //     //  TextSpan(
+                        //     //     // text: 'Millie Bobby Brown, Henry Cavill, Sam Clafin, Helena Bonham Carter', 
+                        //     //     text: actors, 
+                        //     //     style: TextStyle(
+                        //     //       fontStyle: FontStyle.italic,
+                        //     //       color: Colors.white,
+                        //     //       fontSize: 12.0,
+                        //     //     )
+                        //     //   ),
+                        //     ],
+                        //   ),
+                        // ),
+                      ),
+                                  
                     ]
                   )
                 ),
@@ -242,9 +279,9 @@ class DetailsWidget extends StatelessWidget {
                        Container(
                           margin: EdgeInsets.only(top: 5.0),
                           child: Text(
-                            'While searching for her missing mother, intrepid teen Enola Holmes uses her sleuthing skils to outsmart big brother Sherlock and help a runaway lord.While searching for her missing mother, intrepid teen Enola Holmes uses her sleuthing skils to outsmart big brother Sherlock and help a runaway lord.While searching for her missing mother, intrepid teen Enola Holmes uses her sleuthing skils to outsmart big brother Sherlock and help a runaway lord.While searching for her missing mother, intrepid teen Enola Holmes uses her sleuthing skils to outsmart big brother Sherlock and help a runaway lord.',
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
+                            description,
+                            // maxLines: 4,
+                            // overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               color: Colors.white,
@@ -258,8 +295,10 @@ class DetailsWidget extends StatelessWidget {
 
               ],
             ),
-
+            )
+        
           )
+
         ],
     );
   }  

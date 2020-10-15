@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:AppYnov/pages/details/details.dart';
 import 'package:AppYnov/repository/tmdb/repository.dart';
 
 
@@ -38,7 +39,6 @@ class HomeWidget extends StatelessWidget {
                       ),
 
                       new ListViewBuilderPopularMovie()  
-                      // new ListViewBuilderPrint2()            
                     ],
                   )
                 ),
@@ -62,7 +62,7 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      new ListViewBuilderPopularTV()              
+                      // new ListViewBuilderPopularTV()              
                     ],
                   )
                 ),
@@ -86,34 +86,34 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      new ListViewBuilderBestMovies()              
+                      // new ListViewBuilderBestMovies()              
                     ],
                   )
                 ),
 
                 // // Rangé 4 -> Movie upcoming
-                // Container(
-                //   margin: const EdgeInsets.only(top: 20.0),
-                //   child: Column(
-                //     children: <Widget>[
-                //       // Alignement du titre
-                //       Align(
-                //         alignment: Alignment.centerLeft,
-                //         child: Container(
-                //           child: Text("A venir",
-                //             style: TextStyle(
-                //               fontSize: 25,
-                //               fontWeight: FontWeight.bold,
-                //               color: Colors.white,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
+                Container(
+                  margin: const EdgeInsets.only(top: 20.0),
+                  child: Column(
+                    children: <Widget>[
+                      // Alignement du titre
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          child: Text("A venir",
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
 
-                //       new ListViewBuilderMoviesUpcoming()              
-                //     ],
-                //   )
-                // )
+                      // new ListViewBuilderMoviesUpcoming()              
+                    ],
+                  )
+                )
 
 
               ]
@@ -133,19 +133,34 @@ class ListViewBuilderPopularMovie extends StatelessWidget {
     return new SizedBox(
       height: 175.0,
        
+      //Un FutureBuilder permet d'afficher de manière asynchrone les résultats d'un Future
       child: FutureBuilder(
         future: RepoTMDB.fetchDataPopularMovies(),
         builder: (context, snapshot){
+          //Test de la connexion - On affiche un loader
           if(snapshot.connectionState != ConnectionState.done) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else {
+          }
+          //Sinon on construit la liste 
+          else {
             return ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data.length,
+              scrollDirection: Axis.horizontal, //Direction de la liste
+              itemCount: snapshot.data.length, //Count des resultats
               itemBuilder: (BuildContext context, int index) => GestureDetector(
-                // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => new DetailPage())),
+                onTap: () => Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => DetailPage(
+                    snapshot.data[index].id,
+                    snapshot.data[index].title,
+                    snapshot.data[index].poster,
+                    // snapshot.data[index].average,
+                    snapshot.data[index].description,
+                    snapshot.data[index].date,
+                    )
+                  )
+                ),
 
                 // Mise en forme des images
                 child: Padding(
@@ -256,45 +271,56 @@ class ListViewBuilderBestMovies extends StatelessWidget {
   }
 }
 
-// // Construction de la listeViewBuilder Widget
-// class ListViewBuilderMoviesUpcoming extends StatelessWidget {
-//   @override
-//   Widget build (BuildContext context) {
-//     return new SizedBox(
-//       height: 175.0,
+// Construction de la listeViewBuilder Widget
+class ListViewBuilderMoviesUpcoming extends StatelessWidget {
+  @override
+  Widget build (BuildContext context) {
+    return new SizedBox(
+      height: 175.0,
        
-//       child: FutureBuilder(
-//         future: RepoTMDB.fetchDataMoviesUpcoming(),
-//         builder: (context, snapshot){
-//           if(snapshot.connectionState != ConnectionState.done) {
-//             return Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           } else {
-//             return ListView.builder(
-//               scrollDirection: Axis.horizontal,
-//               itemCount: snapshot.data.length,
-//               itemBuilder: (BuildContext context, int index) => GestureDetector(
-//                 // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => new DetailPage())),
+      child: FutureBuilder(
+        future: RepoTMDB.fetchDataMoviesUpcoming(),
+        builder: (context, snapshot){
+          if(snapshot.connectionState != ConnectionState.done) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) => GestureDetector(
+                onTap: () => Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => DetailPage(
+                    snapshot.data[index].id,
+                    snapshot.data[index].title,
+                    snapshot.data[index].poster,
+                    // snapshot.data[index].average,
+                    snapshot.data[index].description,
+                    snapshot.data[index].date,
+                    )
+                  )
+                ),
 
-//                 // Mise en forme des images
-//                 child: Padding(
-//                   padding: const EdgeInsets.only(top: 5.0, right: 30.0),
-//                   child: ClipRRect(
-//                       borderRadius: BorderRadius.circular(5),
-//                       child: Image.network(
-//                       'https://image.tmdb.org/t/p/original'+snapshot.data[index].poster,
-//                       fit: BoxFit.cover,
-//                       ),
-//                   ),
-//                 ),
+                // Mise en forme des images
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5.0, right: 30.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.network(
+                      'https://image.tmdb.org/t/p/original'+snapshot.data[index].poster,
+                      fit: BoxFit.cover,
+                      ),
+                  ),
+                ),
 
-//               )
-//             );
-//           }
-//         },
-//       ),
+              )
+            );
+          }
+        },
+      ),
 
-//     );
-//   }
-// }
+    );
+  }
+}
