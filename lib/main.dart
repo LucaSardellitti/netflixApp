@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 // import 'pages/details/details.dart';
 import 'pages/home/home.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:AppYnov/repository/tmdb/repository.dart';
+
 
 void main() {
   runApp(MyApp());

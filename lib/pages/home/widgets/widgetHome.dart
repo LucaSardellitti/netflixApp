@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import '../../details/details.dart';
 import 'package:AppYnov/repository/tmdb/repository.dart';
-import 'package:AppYnov/models/movies_model.dart';
 
 
 class HomeWidget extends StatelessWidget {
@@ -39,7 +37,7 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      new ListViewBuilderPrint()  
+                      new ListViewBuilderPopularMovie()  
                       // new ListViewBuilderPrint2()            
                     ],
                   )
@@ -64,7 +62,7 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      new ListViewBuilderPrint()              
+                      new ListViewBuilderPopularTV()              
                     ],
                   )
                 ),
@@ -88,34 +86,34 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      new ListViewBuilderPrint()              
+                      new ListViewBuilderBestMovies()              
                     ],
                   )
                 ),
 
-                // Rangé 4 -> Test scroll
-                Container(
-                  margin: const EdgeInsets.only(top: 20.0),
-                  child: Column(
-                    children: <Widget>[
-                      // Alignement du titre
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          child: Text("Test Scroll",
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
+                // // Rangé 4 -> Movie upcoming
+                // Container(
+                //   margin: const EdgeInsets.only(top: 20.0),
+                //   child: Column(
+                //     children: <Widget>[
+                //       // Alignement du titre
+                //       Align(
+                //         alignment: Alignment.centerLeft,
+                //         child: Container(
+                //           child: Text("A venir",
+                //             style: TextStyle(
+                //               fontSize: 25,
+                //               fontWeight: FontWeight.bold,
+                //               color: Colors.white,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
 
-                      new ListViewBuilderPrint()              
-                    ],
-                  )
-                )
+                //       new ListViewBuilderMoviesUpcoming()              
+                //     ],
+                //   )
+                // )
 
 
               ]
@@ -129,62 +127,174 @@ class HomeWidget extends StatelessWidget {
 
 
 // Construction de la listeViewBuilder Widget
-class ListViewBuilderPrint extends StatelessWidget {
+class ListViewBuilderPopularMovie extends StatelessWidget {
   @override
   Widget build (BuildContext context) {
     return new SizedBox(
       height: 175.0,
-      child: ListView.builder(
-        // physics: ClampingScrollPhysics(),
-        // shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemCount: 15,
-        itemBuilder: (BuildContext context, int index) => GestureDetector(
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => new DetailPage())),
+       
+      child: FutureBuilder(
+        future: RepoTMDB.fetchDataPopularMovies(),
+        builder: (context, snapshot){
+          if(snapshot.connectionState != ConnectionState.done) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) => GestureDetector(
+                // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => new DetailPage())),
 
-          // Mise en forme des images
-          child: Padding(
-            padding: const EdgeInsets.only(top: 5.0, right: 30.0),
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: Image.asset(
-                'assets/images/imgFilm.jpg',
-                fit: BoxFit.cover,
+                // Mise en forme des images
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5.0, right: 30.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.network(
+                      'https://image.tmdb.org/t/p/original'+snapshot.data[index].poster,
+                      fit: BoxFit.cover,
+                      ),
+                  ),
                 ),
-            ),
-          ),
 
-        )
+              )
+            );
+          }
+        },
       ),
+
     );
   }
 }
 
-// class ListViewBuilderPrint2 extends StatelessWidget {
+// Construction de la listeViewBuilder Widget
+class ListViewBuilderPopularTV extends StatelessWidget {
+  @override
+  Widget build (BuildContext context) {
+    return new SizedBox(
+      height: 175.0,
+       
+      child: FutureBuilder(
+        future: RepoTMDB.fetchDataPopularTvShow(),
+        builder: (context, snapshot){
+          if(snapshot.connectionState != ConnectionState.done) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) => GestureDetector(
+                // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => new DetailPage())),
+
+                // Mise en forme des images
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5.0, right: 30.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.network(
+                      'https://image.tmdb.org/t/p/original'+snapshot.data[index].poster,
+                      fit: BoxFit.cover,
+                      ),
+                  ),
+                ),
+
+              )
+            );
+          }
+        },
+      ),
+
+    );
+  }
+}
+
+
+// Construction de la listeViewBuilder Widget
+class ListViewBuilderBestMovies extends StatelessWidget {
+  @override
+  Widget build (BuildContext context) {
+    return new SizedBox(
+      height: 175.0,
+       
+      child: FutureBuilder(
+        future: RepoTMDB.fetchDataBestMovies(),
+        builder: (context, snapshot){
+          if(snapshot.connectionState != ConnectionState.done) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) => GestureDetector(
+                // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => new DetailPage())),
+
+                // Mise en forme des images
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5.0, right: 30.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.network(
+                      'https://image.tmdb.org/t/p/original'+snapshot.data[index].poster,
+                      fit: BoxFit.cover,
+                      ),
+                  ),
+                ),
+
+              )
+            );
+          }
+        },
+      ),
+
+    );
+  }
+}
+
+// // Construction de la listeViewBuilder Widget
+// class ListViewBuilderMoviesUpcoming extends StatelessWidget {
 //   @override
 //   Widget build (BuildContext context) {
-//     return new Scaffold(
-//       body: FutureBuilder(
-//         future: RepoTMDB.fetchData(),
-//         builder: (BuildContext context, AsyncSnapshot<List<MovieModel>> snapshot){
+//     return new SizedBox(
+//       height: 175.0,
+       
+//       child: FutureBuilder(
+//         future: RepoTMDB.fetchDataMoviesUpcoming(),
+//         builder: (context, snapshot){
 //           if(snapshot.connectionState != ConnectionState.done) {
 //             return Center(
 //               child: CircularProgressIndicator(),
 //             );
 //           } else {
-//             List<MovieModel> movies = snapshot.data;
-//             return ListView(
-//               children: movies
-//               .map(
-//                 (MovieModel movies) => ListTile(
-//                 title: Text(movies.title),
+//             return ListView.builder(
+//               scrollDirection: Axis.horizontal,
+//               itemCount: snapshot.data.length,
+//               itemBuilder: (BuildContext context, int index) => GestureDetector(
+//                 // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => new DetailPage())),
+
+//                 // Mise en forme des images
+//                 child: Padding(
+//                   padding: const EdgeInsets.only(top: 5.0, right: 30.0),
+//                   child: ClipRRect(
+//                       borderRadius: BorderRadius.circular(5),
+//                       child: Image.network(
+//                       'https://image.tmdb.org/t/p/original'+snapshot.data[index].poster,
+//                       fit: BoxFit.cover,
+//                       ),
+//                   ),
 //                 ),
+
 //               )
-//               .toList()
-//             );   
+//             );
 //           }
 //         },
 //       ),
+
 //     );
 //   }
 // }
