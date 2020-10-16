@@ -8,7 +8,8 @@ class DetailsWidget extends StatelessWidget {
   // final dynamic average;
   final String description;
   final String date;
-  DetailsWidget(this.id, this.title, this.poster, /*this.average,*/ this.description, this.date);
+  final String genres;
+  DetailsWidget(this.id, this.title, this.poster, /*this.average,*/ this.description, this.date, this.genres);
   
   @override
   Widget build(BuildContext context) {
@@ -122,6 +123,38 @@ class DetailsWidget extends StatelessWidget {
                   margin: EdgeInsets.only(right: 30.0, left: 30.0),
                   child: new Wrap(
                     children: [
+
+                      Container(
+                        child: 
+                          FutureBuilder(
+                          future: RepoTMDB.fetchDataMoviesGenre(),
+                          builder: (context, snapshot){
+                            //Test de la connexion - On affiche un loader
+                            if(snapshot.connectionState != ConnectionState.done) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            //Sinon on construit la liste 
+                            else {
+                              return Wrap(
+                                children: 
+                                snapshot.data.map((item) => 
+                                  Text(item.genres,
+                                    style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      color: Colors.white,
+                                      fontSize: 12.0,
+                                    ),
+                                  )
+                                ).toList().cast<Widget>(),
+                              );
+                            }
+                          },
+                          ),
+                     ),
+
+
                       // Genre 1
                       Container(
                         margin: EdgeInsets.only(right: 10.0),
@@ -187,68 +220,22 @@ class DetailsWidget extends StatelessWidget {
 
                 // Rangé 4 -> Acteurs
                 Container(
-                  color: Colors.orange,
+                  height: 55.0,
+                  margin: EdgeInsets.only(top: 10.0, right: 30.0, left: 30.0, bottom: 10.0),
                   width: MediaQuery.of(context).size.width,
-                  height: 50.0,
-                  margin: EdgeInsets.only(right: 30.0, left: 30.0),
-                  child: new Column(
+                  child: new Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Rangé 2 -> Text sommaire
-                      Container(
-                        margin: EdgeInsets.only(top: 10.0),
-                        //Un FutureBuilder permet d'afficher de manière asynchrone les résultats d'un Future
-                        child: FutureBuilder(
-                          future: RepoTMDB.fetchDataPopularMovies(),
-                          builder: (context, snapshot){
-                            //Test de la connexion - On affiche un loader
-                            if(snapshot.connectionState != ConnectionState.done) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            //Sinon on construit la liste 
-                            else {
-                              return ListView.builder(
-                                itemBuilder: (BuildContext context, int index) => GestureDetector(
-                                  // Mise en forme des images
-                                  child: Text(
-                                    snapshot.data[index].actors,
-                                  ),
-
-                                )
-                              );
-                            }
-                          },
+                      Text(
+                        "Cast: ",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold, 
+                          color: Colors.white,
+                          fontSize: 15.0,
                         ),
-                        // child: Text.rich(
-                        //   TextSpan(
-                        //     children: <TextSpan>[
-                        //       // Premier texte
-                        //       TextSpan(
-                        //         text: ' Cast: ', 
-                        //         style: TextStyle(
-                        //           fontWeight: FontWeight.bold, 
-                        //           color: Colors.white,
-                        //           fontSize: 12.0,
-                        //         )
-                        //       ),
-
-                        //      // Deuxième texte
-                        //     //  TextSpan(
-                        //     //     // text: 'Millie Bobby Brown, Henry Cavill, Sam Clafin, Helena Bonham Carter', 
-                        //     //     text: actors, 
-                        //     //     style: TextStyle(
-                        //     //       fontStyle: FontStyle.italic,
-                        //     //       color: Colors.white,
-                        //     //       fontSize: 12.0,
-                        //     //     )
-                        //     //   ),
-                        //     ],
-                        //   ),
-                        // ),
                       ),
-                                  
-                    ]
+                      DisplayActorsByFilm(id)
+                    ]                    
                   )
                 ),
 
@@ -302,4 +289,43 @@ class DetailsWidget extends StatelessWidget {
         ],
     );
   }  
+}
+
+// Widget List Actors By Films
+class DisplayActorsByFilm extends StatelessWidget{
+  final int id;
+  DisplayActorsByFilm(this.id);
+
+  @override
+  Widget build (BuildContext context){
+    return new Expanded(
+      child: 
+        FutureBuilder(
+        future: RepoTMDB.fetchDataMoviesCast("$id"),
+        builder: (context, snapshot){
+          //Test de la connexion - On affiche un loader
+          if(snapshot.connectionState != ConnectionState.done) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          //Sinon on construit la liste 
+          else {
+            return Wrap(
+              children: 
+              snapshot.data.map((item) => 
+                Text(item.actors+",",
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontSize: 12.0,
+                  ),
+                )
+              ).toList().cast<Widget>(),
+            );
+          }
+        },
+        ),
+    );
+  }
 }

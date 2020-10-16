@@ -77,4 +77,18 @@ class RepoTMDB {
 
       return actors;
     }
+
+    static Future<List<MovieModel>> fetchDataMoviesGenre() async{
+      String url = "https://api.themoviedb.org/3/genre/movie/list?api_key=62feaff3d2cf094a340f530fbf25bde9";
+
+      final response = await http.get(url);
+      var jsonData = json.decode(response.body)['genres'];
+      List<MovieModel> genres = [];
+
+      for(var data in jsonData){
+        genres.add(MovieModel.fromJson(data));
+      }
+
+      return genres;
+    }
 }

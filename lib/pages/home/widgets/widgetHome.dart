@@ -158,6 +158,7 @@ class ListViewBuilderPopularMovie extends StatelessWidget {
                     // snapshot.data[index].average,
                     snapshot.data[index].description,
                     snapshot.data[index].date,
+                    snapshot.data[index].genres,
                     )
                   )
                 ),
@@ -299,6 +300,7 @@ class ListViewBuilderMoviesUpcoming extends StatelessWidget {
                     // snapshot.data[index].average,
                     snapshot.data[index].description,
                     snapshot.data[index].date,
+                    snapshot.data[index].genres,
                     )
                   )
                 ),
