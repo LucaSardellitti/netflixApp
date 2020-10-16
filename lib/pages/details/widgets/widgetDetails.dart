@@ -1,6 +1,7 @@
 import 'package:AppYnov/repository/tmdb/repository.dart';
 import 'package:flutter/material.dart';
 
+// Widget Principal
 class DetailsWidget extends StatelessWidget {
   final int id;
   final String title;
@@ -8,8 +9,8 @@ class DetailsWidget extends StatelessWidget {
   // final dynamic average;
   final String description;
   final String date;
-  final String genres;
-  DetailsWidget(this.id, this.title, this.poster, /*this.average,*/ this.description, this.date, this.genres);
+  //final String genres;
+  DetailsWidget(this.id, this.title, this.poster, /*this.average,*/ this.description, this.date/*, this.genres*/);
   
   @override
   Widget build(BuildContext context) {
@@ -119,103 +120,8 @@ class DetailsWidget extends StatelessWidget {
                 // Rangé 3 -> Genres
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: 50.0,
                   margin: EdgeInsets.only(right: 30.0, left: 30.0),
-                  child: new Wrap(
-                    children: [
-
-                      Container(
-                        child: 
-                          FutureBuilder(
-                          future: RepoTMDB.fetchDataMoviesGenre(),
-                          builder: (context, snapshot){
-                            //Test de la connexion - On affiche un loader
-                            if(snapshot.connectionState != ConnectionState.done) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            //Sinon on construit la liste 
-                            else {
-                              return Wrap(
-                                children: 
-                                snapshot.data.map((item) => 
-                                  Text(item.genres,
-                                    style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.white,
-                                      fontSize: 12.0,
-                                    ),
-                                  )
-                                ).toList().cast<Widget>(),
-                              );
-                            }
-                          },
-                          ),
-                     ),
-
-
-                      // Genre 1
-                      Container(
-                        margin: EdgeInsets.only(right: 10.0),
-                        //Button style
-                        child: SizedBox(
-                          width: 65,
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(6.0)),
-                            onPressed: () {},
-                            child: new Text(
-                              'Crime', 
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold
-                              )
-                            )
-                          )
-                        )
-                      ),
-
-                      // Genre 2
-                      Container(
-                        margin: EdgeInsets.only(right: 10.0),
-                         //Button style
-                        child: SizedBox(
-                          width: 65,
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(6.0)),
-                            onPressed: () {},
-                            child: new Text(
-                              'Drama', 
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold
-                              )
-                            )
-                          )
-                        )
-                      ),
-
-                      // Genre 3
-                      Container(
-                        //Button style
-                        child: SizedBox(
-                          width: 70,
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(6.0)),
-                            onPressed: () {},
-                            child: new Text(
-                              'Mystery', 
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold
-                              )
-                            )
-                          )
-                        )
-                      )
-
-                    ]
-                  )
+                  child: DisplayGenreByFilms(id)
                 ),
 
                 // Rangé 4 -> Acteurs
@@ -291,6 +197,8 @@ class DetailsWidget extends StatelessWidget {
   }  
 }
 
+
+// Widgets Secondaires (liste d'acteurs, liste de genres)
 // Widget List Actors By Films
 class DisplayActorsByFilm extends StatelessWidget{
   final int id;
@@ -326,6 +234,53 @@ class DisplayActorsByFilm extends StatelessWidget{
           }
         },
         ),
+    );
+  }
+}
+
+// Widget List Genres By Films
+class DisplayGenreByFilms extends StatelessWidget{
+  final int id;
+  DisplayGenreByFilms(this.id);
+
+  @override
+  Widget build (BuildContext context){
+    return new Wrap(
+      children: [
+        Container(
+          child: FutureBuilder(
+            future: RepoTMDB.fetchDataMoviesDetails("$id", "genres"),
+            builder: (context, snapshot){
+              if(snapshot.connectionState != ConnectionState.done) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return Wrap(
+                  children: 
+                  snapshot.data.map((item) => 
+                  Container(
+                    margin: EdgeInsets.only(right: 10.0),
+                    child: 
+                    FlatButton(
+                      child: Text(
+                      item.genres,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      color: Colors.grey[300],
+                      onPressed: () {},
+                    ),
+                  )
+                  ).toList().cast<Widget>(),
+                );
+              }
+            },
+          ),
+        ),
+      ]
     );
   }
 }
