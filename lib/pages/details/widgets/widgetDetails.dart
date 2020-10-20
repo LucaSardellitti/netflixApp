@@ -6,17 +6,17 @@ class DetailsWidget extends StatelessWidget {
   final int id;
   final String title;
   final String poster;
-  // final dynamic average;
+  final dynamic average;
   final String description;
   final String date;
-  //final String genres;
-  DetailsWidget(this.id, this.title, this.poster, /*this.average,*/ this.description, this.date/*, this.genres*/);
+  final type;
+
+  DetailsWidget(this.id, this.title, this.poster, this.average, this.description, this.date, this.type/*, this.genres*/);
   
   @override
   Widget build(BuildContext context) {
     return new Stack(
         fit: StackFit.expand,
-        // alignment: .bottomCenter,
         children: [
           Image.network(
             'https://image.tmdb.org/t/p/original'+ poster,
@@ -71,20 +71,13 @@ class DetailsWidget extends StatelessWidget {
                     children: [
                       // Colonne 1 -> Age
                       Container(
-                        child: Text(
-                          '15+  -',
-                          style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 14.0,
-                          )
-                        )
+                        child: DisplayCertification(id, type)
                       ),
 
                       // Colonne 2 -> Date
                       Container(
                         child: Text(
-                          '  '+ date +'  -',
+                          '  ' + date + '  -',
                           style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -103,7 +96,7 @@ class DetailsWidget extends StatelessWidget {
                             color: Colors.tealAccent[400],
                             size: 16.0,
                             ),
-                            Text('  In test'/*+ average*/,
+                            Text('  '+ average.toString(),
                               style: TextStyle( 
                               fontWeight: FontWeight.bold,
                               color: Colors.tealAccent[400],
@@ -121,7 +114,7 @@ class DetailsWidget extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width,
                   margin: EdgeInsets.only(right: 30.0, left: 30.0),
-                  child: DisplayGenreByFilms(id)
+                  child: DisplayGenre(id, type)
                 ),
 
                 // Rangé 4 -> Acteurs
@@ -140,7 +133,7 @@ class DetailsWidget extends StatelessWidget {
                           fontSize: 15.0,
                         ),
                       ),
-                      DisplayActorsByFilm(id)
+                      DisplayActors(id, type)
                     ]                    
                   )
                 ),
@@ -199,17 +192,18 @@ class DetailsWidget extends StatelessWidget {
 
 
 // Widgets Secondaires (liste d'acteurs, liste de genres)
-// Widget List Actors By Films
-class DisplayActorsByFilm extends StatelessWidget{
+// Widget List Actors
+class DisplayActors extends StatelessWidget{
   final int id;
-  DisplayActorsByFilm(this.id);
+  final type;
+  DisplayActors(this.id, this.type);
 
   @override
   Widget build (BuildContext context){
     return new Expanded(
       child: 
         FutureBuilder(
-        future: RepoTMDB.fetchDataMoviesCast("$id"),
+        future: RepoTMDB.fetchDataCast("$id", "$type"),
         builder: (context, snapshot){
           //Test de la connexion - On affiche un loader
           if(snapshot.connectionState != ConnectionState.done) {
@@ -238,10 +232,12 @@ class DisplayActorsByFilm extends StatelessWidget{
   }
 }
 
-// Widget List Genres By Films
-class DisplayGenreByFilms extends StatelessWidget{
+
+// Widget List Genres
+class DisplayGenre extends StatelessWidget{
   final int id;
-  DisplayGenreByFilms(this.id);
+  final type;
+  DisplayGenre(this.id, this.type);
 
   @override
   Widget build (BuildContext context){
@@ -249,7 +245,7 @@ class DisplayGenreByFilms extends StatelessWidget{
       children: [
         Container(
           child: FutureBuilder(
-            future: RepoTMDB.fetchDataMoviesDetails("$id", "genres"),
+            future: RepoTMDB.fetchDataDetails("$id", "$type", "genres"),
             builder: (context, snapshot){
               if(snapshot.connectionState != ConnectionState.done) {
                 return Center(
@@ -281,6 +277,44 @@ class DisplayGenreByFilms extends StatelessWidget{
           ),
         ),
       ]
+    );
+  }
+}
+
+
+// Widget List Certification
+class DisplayCertification extends StatelessWidget{
+  final int id;
+  final type;
+  DisplayCertification(this.id, this.type);
+
+  @override
+  Widget build (BuildContext context){
+    return new Container(
+      child: FutureBuilder(
+        future: RepoTMDB.fetchDataCertification("$id", "$type"),
+        builder: (context, snapshot){
+          if(snapshot.connectionState != ConnectionState.done) {
+            //print("DEBUUUUUUGGGG -> "+snapshot.data[snapshot]);
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return Container(
+                margin: EdgeInsets.only(right: 10.0),
+                child: 
+                Text("Test",
+                  //snapshot.data[snapshot].certification.toString() + '  -',
+                  style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 14.0,
+                )
+              )
+            );
+          }
+        },
+      ),
     );
   }
 }

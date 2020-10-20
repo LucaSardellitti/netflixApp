@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 class RepoTMDB {
 
   //Un Future est utilisé pour représenter une  valeur qui sera disponible plus tard
+  //Future pour les Films populaires; Séries populaires; Meilleurs films: Films à venir
   static Future<List<MovieModel>> fetchData(type) async{
     String url;
 
@@ -31,8 +32,16 @@ class RepoTMDB {
     return movies;
   }
 
-  static Future<List<MovieModel>> fetchDataMoviesCast(id) async{
-    String url = "https://api.themoviedb.org/3/movie/"+id+"/credits?api_key=62feaff3d2cf094a340f530fbf25bde9";
+  //Future pour le cast des Films; Séries
+  static Future<List<MovieModel>> fetchDataCast(id, type) async{
+    String url;
+
+    if(type == "movie"){
+      url = "https://api.themoviedb.org/3/movie/"+id+"/credits?api_key=62feaff3d2cf094a340f530fbf25bde9";
+    }
+    else if(type == "tvShow"){
+      url = "https://api.themoviedb.org/3/tv/"+id+"/credits?api_key=62feaff3d2cf094a340f530fbf25bde9";
+    }
 
     final response = await http.get(url);
     var jsonData = json.decode(response.body)['cast'];
@@ -45,25 +54,56 @@ class RepoTMDB {
     return actors;
   }
 
-  static Future<List<MovieModel>> fetchDataMoviesDetails(id, type) async{
-    String url = "https://api.themoviedb.org/3/movie/"+id+"?api_key=62feaff3d2cf094a340f530fbf25bde9";
+  //Future pour le details des Films; Series
+  static Future<List<MovieModel>> fetchDataDetails(id, type, val) async{
+    String url;
+
+    if(type == "movie"){
+      url = "https://api.themoviedb.org/3/movie/"+id+"?api_key=62feaff3d2cf094a340f530fbf25bde9";
+    }
+    else if(type == "tvShow"){
+      url = "https://api.themoviedb.org/3/tv/"+id+"?api_key=62feaff3d2cf094a340f530fbf25bde9";
+    }
 
     var jsonData;
 
     final response = await http.get(url);
-    if(type != null){
-      jsonData = json.decode(response.body)[type];
+    if(val != null){
+      jsonData = json.decode(response.body)[val];
     }
     else {
       jsonData = json.decode(response.body);
     }
     
-    List<MovieModel> genres = [];
+    List<MovieModel> values = [];
 
     for(var data in jsonData){
-      genres.add(MovieModel.fromJson(data));
+      values.add(MovieModel.fromJson(data));
     }
 
-    return genres;
+    return values;
+  }
+
+
+  //Future pour le details des Films; Series
+  static Future<List<MovieModel>> fetchDataCertification(id, type) async{
+    String url;
+
+    if(type == "movie"){
+      url = "https://api.themoviedb.org/3/movie/"+id+"/release_dates?api_key=62feaff3d2cf094a340f530fbf25bde9";
+    }
+    else if(type == "tvShow"){
+      url = "https://api.themoviedb.org/3/tv/"+id+"/release_dates?api_key=62feaff3d2cf094a340f530fbf25bde9";
+    }
+
+    final response = await http.get(url);
+    var jsonData = json.decode(response.body)['results']['release_dates']; 
+    List<MovieModel> values = [];
+
+    for(var data in jsonData){
+      values.add(MovieModel.fromJson(data));
+    }
+
+    return values;
   }
 }

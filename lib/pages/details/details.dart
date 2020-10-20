@@ -5,27 +5,30 @@ class DetailPage extends StatefulWidget {
   final int id;
   final String title;
   final String poster;
-  // final dynamic average;
+  final dynamic average;
   final String description;
   final String date;
+  final String type;
   // final String genres;
-  DetailPage(this.id, this.title, this.poster, /*this.average,*/ this.description, this.date, /*this.genres*/);
+  DetailPage(this.id, this.title, this.poster, this.average, this.description, this.date, this.type);
 
   @override
   State<StatefulWidget> createState(){
-    return new _DetailPage(this.id, this.title, this.poster, /*this.average,*/ this.description, this.date /*,this.genres*/);
+    return new _DetailPage(this.id, this.title, this.poster, this.average, this.description, this.date, this.type);
   }
 }
+
 
 class _DetailPage extends State<DetailPage> {
   final int id;
   final String title;
   final String poster;
-  // final dynamic average;
+  final dynamic average;
   final String description;
   final String date;
+  final String type;
   // final String genres;
-  _DetailPage(this.id, this.title, this.poster, /*this.average,*/ this.description, this.date/*, this.genres*/);
+  _DetailPage(this.id, this.title, this.poster, this.average, this.description, this.date, this.type);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,7 @@ class _DetailPage extends State<DetailPage> {
      ),
 
      // Corps de l'application
-     body: new DetailsWidget(this.id, this.title, this.poster, /*this.average,*/ this.description, this.date/*, this.genres*/)
+     body: new DetailsWidget(this.id, this.title, this.poster, this.average, this.description, this.date, this.type)
    );
   }
 }

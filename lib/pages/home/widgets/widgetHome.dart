@@ -9,13 +9,11 @@ class HomeWidget extends StatelessWidget {
   Widget build (BuildContext context) {
     return new SingleChildScrollView(
       child: new Column(
-        // mainAxisSize: MainAxisSize.min,
         children:[
 
           new Container(
             color: Colors.grey[850],
             width: MediaQuery.of(context).size.width,
-            // height: MediaQuery.of(context).size.height,
             padding: const EdgeInsets.only(left: 10.0, right: 10.0),
             child: new Column(
               children: [
@@ -38,12 +36,12 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      // new ListViewBuilderPopularMovie()  
+                      new ListViewBuilderPopularMovie()  
                     ],
                   )
                 ),
 
-                // Rangé 1 -> Popular TV Shows
+                // Rangé 2 -> Popular TV Shows
                 Container(
                   margin: const EdgeInsets.only(top: 20.0),
                   child: Column(
@@ -67,30 +65,6 @@ class HomeWidget extends StatelessWidget {
                   )
                 ),
 
-                // Rangé 2 -> Popular TV Shows
-                // Container(
-                //   margin: const EdgeInsets.only(top: 20.0),
-                //   child: Column(
-                //     children: <Widget>[
-                //       // Alignement du titre
-                //       Align(
-                //         alignment: Alignment.centerLeft,
-                //         child: Container(
-                //           child: Text("Popular TV Shows",
-                //             style: TextStyle(
-                //               fontSize: 25,
-                //               fontWeight: FontWeight.bold,
-                //               color: Colors.white,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-
-                //       new ListViewBuilderPopularTV()              
-                //     ],
-                //   )
-                // ),
-
                 // Rangé 3 -> Best Movies
                 Container(
                   margin: const EdgeInsets.only(top: 20.0),
@@ -110,7 +84,7 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      // new ListViewBuilderBestMovies()              
+                      new ListViewBuilderBestMovies()              
                     ],
                   )
                 ),
@@ -134,7 +108,7 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      // new ListViewBuilderMoviesUpcoming()              
+                      new ListViewBuilderMoviesUpcoming()              
                     ],
                   )
                 )
@@ -149,7 +123,8 @@ class HomeWidget extends StatelessWidget {
   }
 }
 
-// Widgets Sceondaires (liste films populaires, séries, best movies, à venir)
+
+// Widgets Secondaires (liste films populaires, séries, best movies, à venir)
 // Widget Popular Movies 
 class ListViewBuilderPopularMovie extends StatelessWidget {
   @override
@@ -179,9 +154,10 @@ class ListViewBuilderPopularMovie extends StatelessWidget {
                     snapshot.data[index].id,
                     snapshot.data[index].title,
                     snapshot.data[index].poster,
-                    // snapshot.data[index].average,
+                    snapshot.data[index].average,
                     snapshot.data[index].description,
                     snapshot.data[index].date,
+                    "movie"
                     )
                   )
                 ),
@@ -207,6 +183,7 @@ class ListViewBuilderPopularMovie extends StatelessWidget {
     );
   }
 }
+
 
 // Widget Popular Tv
 class ListViewBuilderPopularTV extends StatelessWidget {
@@ -218,7 +195,6 @@ class ListViewBuilderPopularTV extends StatelessWidget {
       child: FutureBuilder(
         future: RepoTMDB.fetchData("popularTv"),
         builder: (context, snapshot){
-          //Test de la connexion - On affiche un loader
           if(snapshot.connectionState != ConnectionState.done) {
             return Center(
               child: CircularProgressIndicator(),
@@ -227,18 +203,19 @@ class ListViewBuilderPopularTV extends StatelessWidget {
           //Sinon on construit la liste 
           else {
             return ListView.builder(
-              scrollDirection: Axis.horizontal, //Direction de la liste
-              itemCount: snapshot.data.length, //Count des resultats
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) => GestureDetector(
                 onTap: () => Navigator.push(
                   context, 
                   MaterialPageRoute(builder: (context) => DetailPage(
                     snapshot.data[index].id,
-                    snapshot.data[index].title,
+                    snapshot.data[index].nameTvShow,
                     snapshot.data[index].poster,
-                    // snapshot.data[index].average,
+                    snapshot.data[index].average,
                     snapshot.data[index].description,
-                    snapshot.data[index].date,
+                    snapshot.data[index].dateTvShow,
+                    "tvShow"
                     )
                   )
                 ),
@@ -264,6 +241,7 @@ class ListViewBuilderPopularTV extends StatelessWidget {
     );
   }
 }
+
 
 // Widget Best Movies 
 class ListViewBuilderBestMovies extends StatelessWidget {
@@ -290,9 +268,10 @@ class ListViewBuilderBestMovies extends StatelessWidget {
                     snapshot.data[index].id,
                     snapshot.data[index].title,
                     snapshot.data[index].poster,
-                    // snapshot.data[index].average,
+                    snapshot.data[index].average,
                     snapshot.data[index].description,
                     snapshot.data[index].date,
+                    "movie"
                     )
                   )
                 ),
@@ -319,6 +298,7 @@ class ListViewBuilderBestMovies extends StatelessWidget {
   }
 }
 
+
 // Widget Upcoming Movies 
 class ListViewBuilderMoviesUpcoming extends StatelessWidget {
   @override
@@ -344,8 +324,10 @@ class ListViewBuilderMoviesUpcoming extends StatelessWidget {
                     snapshot.data[index].id,
                     snapshot.data[index].title,
                     snapshot.data[index].poster,
+                    snapshot.data[index].average,
                     snapshot.data[index].description,
                     snapshot.data[index].date,
+                    "movie"
                     )
                   )
                 ),

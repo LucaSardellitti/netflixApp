@@ -8,13 +8,11 @@ class Home extends StatefulWidget {
   }
 }
 
+
 class _Home extends State<Home> {
   @override
   Widget build (BuildContext ctxt) {
     return new Scaffold(
-      // appBar: new AppBar(
-      //   title: new Text("HomePage"),
-      // ),
       body: new HomeWidget()
     );
   }
