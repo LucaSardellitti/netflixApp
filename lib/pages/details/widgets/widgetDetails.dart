@@ -11,7 +11,7 @@ class DetailsWidget extends StatelessWidget {
   final String date;
   final type;
 
-  DetailsWidget(this.id, this.title, this.poster, this.average, this.description, this.date, this.type/*, this.genres*/);
+  DetailsWidget(this.id, this.title, this.poster, this.average, this.description, this.date, this.type);
   
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,14 @@ class DetailsWidget extends StatelessWidget {
                     children: [
                       // Colonne 1 -> Age
                       Container(
-                        child: DisplayCertification(id, type)
+                        child: 
+                        Text("15+  -",
+                        style: TextStyle( 
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 14.0,
+                              )
+                        )
                       ),
 
                       // Colonne 2 -> Date
@@ -277,44 +284,6 @@ class DisplayGenre extends StatelessWidget{
           ),
         ),
       ]
-    );
-  }
-}
-
-
-// Widget List Certification
-class DisplayCertification extends StatelessWidget{
-  final int id;
-  final type;
-  DisplayCertification(this.id, this.type);
-
-  @override
-  Widget build (BuildContext context){
-    return new Container(
-      child: FutureBuilder(
-        future: RepoTMDB.fetchDataCertification("$id", "$type"),
-        builder: (context, snapshot){
-          if(snapshot.connectionState != ConnectionState.done) {
-            //print("DEBUUUUUUGGGG -> "+snapshot.data[snapshot]);
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return Container(
-                margin: EdgeInsets.only(right: 10.0),
-                child: 
-                Text("Test",
-                  //snapshot.data[snapshot].certification.toString() + '  -',
-                  style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 14.0,
-                )
-              )
-            );
-          }
-        },
-      ),
     );
   }
 }

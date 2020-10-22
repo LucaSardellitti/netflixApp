@@ -9,7 +9,6 @@ class DetailPage extends StatefulWidget {
   final String description;
   final String date;
   final String type;
-  // final String genres;
   DetailPage(this.id, this.title, this.poster, this.average, this.description, this.date, this.type);
 
   @override
@@ -27,7 +26,6 @@ class _DetailPage extends State<DetailPage> {
   final String description;
   final String date;
   final String type;
-  // final String genres;
   _DetailPage(this.id, this.title, this.poster, this.average, this.description, this.date, this.type);
 
   @override

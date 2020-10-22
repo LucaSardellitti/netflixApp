@@ -84,7 +84,7 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      new ListViewBuilderBestMovies()              
+                      // new ListViewBuilderBestMovies()              
                     ],
                   )
                 ),
@@ -108,7 +108,7 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      new ListViewBuilderMoviesUpcoming()              
+                      //new ListViewBuilderMoviesUpcoming()              
                     ],
                   )
                 )

@@ -84,26 +84,4 @@ class RepoTMDB {
     return values;
   }
 
-
-  //Future pour le details des Films; Series
-  static Future<List<MovieModel>> fetchDataCertification(id, type) async{
-    String url;
-
-    if(type == "movie"){
-      url = "https://api.themoviedb.org/3/movie/"+id+"/release_dates?api_key=62feaff3d2cf094a340f530fbf25bde9";
-    }
-    else if(type == "tvShow"){
-      url = "https://api.themoviedb.org/3/tv/"+id+"/release_dates?api_key=62feaff3d2cf094a340f530fbf25bde9";
-    }
-
-    final response = await http.get(url);
-    var jsonData = json.decode(response.body)['results']['release_dates']; 
-    List<MovieModel> values = [];
-
-    for(var data in jsonData){
-      values.add(MovieModel.fromJson(data));
-    }
-
-    return values;
-  }
 }
