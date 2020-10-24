@@ -60,7 +60,7 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
 
-                      new ListViewBuilderPopularTV()  
+                      //new ListViewBuilderPopularTV()  
                     ],
                   )
                 ),

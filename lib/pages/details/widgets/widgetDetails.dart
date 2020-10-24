@@ -44,7 +44,7 @@ class DetailsWidget extends StatelessWidget {
 
             child: new Column(
               children: [
-                // Rangé 1 -> Titre du filme
+                // Rangé 1 -> Titre du film
                 Container(
                   width: MediaQuery.of(context).size.width,
                   margin: EdgeInsets.only(top: 155.0, right: 30.0, left: 30.0),

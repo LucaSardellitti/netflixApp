@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "857401178009",
+    "firebase_url": "https://appynovflutter.firebaseio.com",
+    "project_id": "appynovflutter",
+    "storage_bucket": "appynovflutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:857401178009:android:3caee19f5187378de48508",
+        "android_client_info": {
+          "package_name": "com.example.AppYnov"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "857401178009-6drtbsat3n7eofb74j51ju1dsi4rju88.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLujDQ4laXeVsuUVvt-QeNuZzhH7uBxVQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "857401178009-6drtbsat3n7eofb74j51ju1dsi4rju88.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

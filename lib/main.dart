@@ -2,6 +2,8 @@ import 'package:AppYnov/pages/home/home.dart';
 import 'package:flutter/material.dart';
 // import 'pages/details/details.dart';
 import 'pages/home/home.dart';
+import 'pages/signIn/signIn.dart';
+
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
         //visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false, //Etiquette de debug (coin haut à droite)
-      home: new Home(),
+      home: new SignIn(),
       // home: new FutureTest(),
     );
   }
