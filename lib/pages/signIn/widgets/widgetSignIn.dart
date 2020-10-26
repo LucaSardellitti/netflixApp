@@ -21,87 +21,56 @@ class SignInWidget extends State<SignIn> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            margin: EdgeInsets.only(top:200.0),
-            color: Colors.red,
+            padding: EdgeInsets.only(right: 40.0, left: 40.0),
+            
+            // Background Gradient 
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.1, 0.5],
+                colors: [Colors.transparent, Colors.grey[850]]
+                )
+            ),
             child:
               Form(
                 key: _formKey,
                 child: 
 
                   Column(
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    // mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      //Input Email
-                      TextFormField(
-                        validator: (input) {
-                          if(input.isEmpty){
-                            return "Please type an email";
-                          }
-                        },
-                        onSaved: (input) => _email = input,
-                        decoration: InputDecoration(
-                          labelText: 'Email'
-                        ),
-                      ),
 
-                      //Input Password
-                      TextFormField(
-                        validator: (input) {
-                          if(input.length < 6){
-                            return "Your password needs 6 characters";
-                          }
-                        },
-                        onSaved: (input) => _password = input,
-                        decoration: InputDecoration(
-                          labelText: 'Password'
+                      //Titre
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: 
+                          Text(
+                          "Login",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 30.0,
+                          ),
                         ),
-                        obscureText: true,//Cache le password
                       ),
+                      
+
+                      //Input Email
+                      InputForm("Email", false),
+                      InputForm("Password", true),
 
                       //Button
                       RaisedButton(
                         onPressed: signIn,
-                        child: Text("SignIn "),
+                        child: Text("LOGIN "),
                         )
                     ]
                   ),
 
               )
-
-
-
-
-
-
-
-
-
-
-
-
-              // Column(
-              //   children: [
-                  
-              //     Container(
-              //         width: MediaQuery.of(context).size.width,
-              //         margin: const EdgeInsets.only(top: 180.0),
-              //         color: Colors.orange,
-              //         child: Text("Login"),
-              //       ),
-
-              //       Container(
-              //         width: MediaQuery.of(context).size.width,
-              //         color: Colors.yellow,
-              //         child: Text("Login"),
-              //       ),
-
-              //       Container(
-              //         width: MediaQuery.of(context).size.width,
-              //         color: Colors.blue,
-              //         child: Text("Button"),
-              //       )
-              //   ],
-              // )
-      
           )
 
         ],
@@ -142,5 +111,79 @@ class SignInWidget extends State<SignIn> {
     }
   }
 
+}
 
+//Widget Design Input
+class InputForm extends StatelessWidget{
+  String type;
+  final obscureText;
+
+  InputForm(this.type, this.obscureText);
+
+  @override
+  Widget build (BuildContext context){
+    
+    //Input Email
+    return new 
+    Container(
+      padding: EdgeInsets.only(top:10.0, bottom: 10.0),
+      child:
+        TextFormField(
+          obscureText: obscureText,//Cache le password
+          cursorColor: Colors.white,
+          style: TextStyle(color: Colors.white),
+          validator: (input) {
+            if(type == "Email"){
+              if(input.isEmpty){
+                return "Please type an email";
+              }
+            }   
+            else if(type == "Password"){
+              if(input.length < 6){
+                return "Your password needs 6 characters";
+              }
+            }
+            return null;
+          },
+          onSaved: (input) => type = input,
+          decoration: InputDecoration(
+            hintText: "$type",
+            filled: true,
+            fillColor: Colors.white24,
+            focusColor: Colors.white,
+            hoverColor: Colors.white,
+            contentPadding: const EdgeInsets.all(20.0),
+
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.white30,
+              ),
+              borderRadius: BorderRadius.circular(30), 
+            ),
+
+            disabledBorder: InputBorder.none,
+            errorBorder:  OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.white30,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.white30,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+
+            focusedErrorBorder:  OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.white30,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+        ),
+    );
+  }
 }
