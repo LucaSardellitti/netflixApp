@@ -21,7 +21,7 @@ class SignInWidget extends State<SignIn> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            padding: EdgeInsets.only(right: 40.0, left: 40.0),
+            padding: EdgeInsets.only(right: 40.0, bottom: 55.0, left: 40.0),
             
             // Background Gradient 
             decoration: BoxDecoration(
@@ -44,29 +44,46 @@ class SignInWidget extends State<SignIn> {
                     children: <Widget>[
 
                       //Titre
-                      Align(
-                        alignment: Alignment.topLeft,
+                      Container(
+                        margin: EdgeInsets.only(bottom: 30.0),
                         child: 
-                          Text(
-                          "Login",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: 30.0,
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: 
+                              Text(
+                              "Login",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 30.0,
+                              ),
+                            ),
                           ),
-                        ),
                       ),
-                      
 
                       //Input Email
-                      InputForm("Email", false),
-                      InputForm("Password", true),
+                      InputForm(_email, "Email", false, null),
+                      InputForm(_password, "Password", true, Icon(Icons.remove_red_eye_sharp, color: Colors.black38)),
 
                       //Button
-                      RaisedButton(
-                        onPressed: signIn,
-                        child: Text("LOGIN "),
-                        )
+                      Container(
+                        margin: EdgeInsets.only(top: 30.0),
+                        child:
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: 
+                              RaisedButton(
+                                color: Color(0xfffac495),//Préfixe oxff (car ffac495 -> RVB)
+                                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                                onPressed: signIn,
+                                child: Text("LOGIN "),
+                                
+                              ),
+                          ),
+                      )
+                      
+                      
                     ]
                   ),
 
@@ -116,9 +133,11 @@ class SignInWidget extends State<SignIn> {
 //Widget Design Input
 class InputForm extends StatelessWidget{
   String type;
+  final String textType;
   final obscureText;
+  final icon;
 
-  InputForm(this.type, this.obscureText);
+  InputForm(this.type, this.textType, this.obscureText, this.icon);
 
   @override
   Widget build (BuildContext context){
@@ -126,19 +145,19 @@ class InputForm extends StatelessWidget{
     //Input Email
     return new 
     Container(
-      padding: EdgeInsets.only(top:10.0, bottom: 10.0),
+      margin: EdgeInsets.only(bottom: 15.0),
       child:
         TextFormField(
           obscureText: obscureText,//Cache le password
           cursorColor: Colors.white,
           style: TextStyle(color: Colors.white),
           validator: (input) {
-            if(type == "Email"){
+            if(textType == "Email"){
               if(input.isEmpty){
                 return "Please type an email";
               }
             }   
-            else if(type == "Password"){
+            else if(textType == "Password"){
               if(input.length < 6){
                 return "Your password needs 6 characters";
               }
@@ -147,7 +166,8 @@ class InputForm extends StatelessWidget{
           },
           onSaved: (input) => type = input,
           decoration: InputDecoration(
-            hintText: "$type",
+            suffixIcon: icon,
+            hintText: textType,
             filled: true,
             fillColor: Colors.white24,
             focusColor: Colors.white,
