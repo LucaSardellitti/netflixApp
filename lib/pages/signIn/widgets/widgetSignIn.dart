@@ -17,6 +17,11 @@ class SignInWidget extends State<SignIn> {
         Stack(
         //fit: StackFit.expand,
         children: [
+          //Background image
+          Image.asset(
+            'assets/images/imgFilm.jpg',
+            fit: BoxFit.cover,
+          ),
 
           Container(
             width: MediaQuery.of(context).size.width,
@@ -62,8 +67,115 @@ class SignInWidget extends State<SignIn> {
                       ),
 
                       //Input Email
-                      InputForm(_email, "Email", false, null),
-                      InputForm(_password, "Password", true, Icon(Icons.remove_red_eye_sharp, color: Colors.black38)),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 15.0),
+                        child:
+                          TextFormField(
+                            cursorColor: Colors.white,
+                            style: TextStyle(color: Colors.white),
+                            validator: (input) {
+                              if(input.isEmpty){
+                                return "Please type an email";
+                              }
+                              return null;
+                            },
+                            onSaved: (input) => _email = input,
+                            decoration: InputDecoration(
+                              hintText: "Email",
+                              filled: true,
+                              fillColor: Colors.white24,
+                              focusColor: Colors.white,
+                              hoverColor: Colors.white,
+                              contentPadding: const EdgeInsets.all(20.0),
+
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white30,
+                                ),
+                                borderRadius: BorderRadius.circular(30), 
+                              ),
+
+                              disabledBorder: InputBorder.none,
+                              errorBorder:  OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white30,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white30,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+
+                              focusedErrorBorder:  OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white30,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                          ),
+                      ),
+
+                      //Input Password
+                      Container(
+                        margin: EdgeInsets.only(bottom: 15.0),
+                        child:
+                          TextFormField(
+                            obscureText: true,//Cache le password
+                            cursorColor: Colors.white,
+                            style: TextStyle(color: Colors.white),
+                            validator: (input) {
+                              
+                              if(input.length < 6){
+                                return "Your password needs 6 characters";
+                              }
+                              return null;
+                            },
+                            onSaved: (input) => _password = input,
+                            decoration: InputDecoration(
+                              suffixIcon: Icon(Icons.remove_red_eye_sharp, color: Colors.black38),
+                              hintText: "Password",
+                              filled: true,
+                              fillColor: Colors.white24,
+                              focusColor: Colors.white,
+                              hoverColor: Colors.white,
+                              contentPadding: const EdgeInsets.all(20.0),
+
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white30,
+                                ),
+                                borderRadius: BorderRadius.circular(30), 
+                              ),
+
+                              disabledBorder: InputBorder.none,
+                              errorBorder:  OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white30,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white30,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+
+                              focusedErrorBorder:  OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white30,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                          ),
+                      ),
 
                       //Button
                       Container(
@@ -130,80 +242,3 @@ class SignInWidget extends State<SignIn> {
 
 }
 
-//Widget Design Input
-class InputForm extends StatelessWidget{
-  String type;
-  final String textType;
-  final obscureText;
-  final icon;
-
-  InputForm(this.type, this.textType, this.obscureText, this.icon);
-
-  @override
-  Widget build (BuildContext context){
-    
-    //Input Email
-    return new 
-    Container(
-      margin: EdgeInsets.only(bottom: 15.0),
-      child:
-        TextFormField(
-          obscureText: obscureText,//Cache le password
-          cursorColor: Colors.white,
-          style: TextStyle(color: Colors.white),
-          validator: (input) {
-            if(textType == "Email"){
-              if(input.isEmpty){
-                return "Please type an email";
-              }
-            }   
-            else if(textType == "Password"){
-              if(input.length < 6){
-                return "Your password needs 6 characters";
-              }
-            }
-            return null;
-          },
-          onSaved: (input) => type = input,
-          decoration: InputDecoration(
-            suffixIcon: icon,
-            hintText: textType,
-            filled: true,
-            fillColor: Colors.white24,
-            focusColor: Colors.white,
-            hoverColor: Colors.white,
-            contentPadding: const EdgeInsets.all(20.0),
-
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.white30,
-              ),
-              borderRadius: BorderRadius.circular(30), 
-            ),
-
-            disabledBorder: InputBorder.none,
-            errorBorder:  OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.white30,
-              ),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.white30,
-              ),
-              borderRadius: BorderRadius.circular(30),
-            ),
-
-            focusedErrorBorder:  OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.white30,
-              ),
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-        ),
-    );
-  }
-}
